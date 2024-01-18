@@ -29,18 +29,18 @@ SEARCH = (By.CSS_SELECTOR, "button[type = 'submit']")
 
 # for Windows: C:\Windows\System32\chromedriver.exe
 
-def signin(browser):
+def signin(browser, email, password):
     try:
         browser.get('https://www.oscarplusmcmaster.ca/Shibboleth.sso/Login?entityID=https://sso.mcmaster.ca/idp/shibboleth&target=https://www.oscarplusmcmaster.ca/secure/ssoStudent.htm')
 
         # wait for email field and enter email
-        WebDriverWait(browser, 60).until(EC.element_to_be_clickable(EMAILFIELD)).send_keys("lunawadm@mcmaster.ca")
+        WebDriverWait(browser, 60).until(EC.element_to_be_clickable(EMAILFIELD)).send_keys(email)
 
         # Click Next
         WebDriverWait(browser, 60).until(EC.element_to_be_clickable(NEXTBUTTON)).click()
 
         # wait for password field and enter password
-        WebDriverWait(browser, 60).until(EC.element_to_be_clickable(PASSWORDFIELD)).send_keys("Talabat4651")
+        WebDriverWait(browser, 60).until(EC.element_to_be_clickable(PASSWORDFIELD)).send_keys(password)
 
         # Click Login - same id?
         WebDriverWait(browser, 60).until(EC.element_to_be_clickable(NEXTBUTTON)).click()
@@ -90,12 +90,12 @@ def signin(browser):
     except:
         return False
 
-def main(browser):
+def main(browser, email, password, recipient):
     print(f"\nRunning oscarplus.py on {curr}...\n")
-    status = signin(browser)
+    status = signin(browser, email, password)
     while status == False:
         browser.delete_all_cookies()
-        status = signin(browser)
+        status = signin(browser, email, password)
 
     WebDriverWait(browser, 60).until(EC.element_to_be_clickable(TEST2)).click()
 
@@ -156,7 +156,7 @@ def main(browser):
 
     if message != '':
 
-        ezgmail.send('oscarplus@googlegroups.com', 'New Summer 2024 OscarPlus Jobs', message)
+        ezgmail.send(recipient, 'New Summer 2024 OscarPlus Jobs', message)
         print(f"OSCARPLUS Email sent with message\n\n{message}\n\n")
         # set last seen to new IF message is non-empty else keep as is
         with open("coop.txt", "w") as f:
@@ -164,7 +164,7 @@ def main(browser):
                 f.write(job + '\n')
 
     else:
-        ezgmail.send('oscarplus@googlegroups.com', 'No New Summer 2024 OscarPlus Jobs', 'Hopefully soon :)')
+        ezgmail.send(recipient, 'No New Summer 2024 OscarPlus Jobs', 'Hopefully soon :)')
         print("OSCARPLUS Email sent (no new jobs)\n")
 
     print("Done.\n")

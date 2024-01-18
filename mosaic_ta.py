@@ -23,16 +23,18 @@ ENTER = (By.CSS_SELECTOR, "input[name = 'SEARCHACTIONS#SEARCH']")
 FIRST_YEAR = 'PHYSICS 1* | MATH 1Z* | IBEHS 1* | CHEM 1* | PSYCH 1XX3'
 SECOND_YEAR = 'HTHSCI 2F* | MATH 2Z03 | SFWRENG 2D* | SFWRENG 2OP3 | SFWRENG 2XC3'
 courses = [FIRST_YEAR, SECOND_YEAR]
+# get macid from email for mosaic
+email_regex = re.compile(r'(.*)@')
 ##### CHANGE THIS IN RASB PI #####
-def main(browser):
+def main(browser, email, password, recipient):
     print(f"\nRunning mosaic_ta.py on {curr}...\n")
     browser.get("https://mosaic.mcmaster.ca/")
-
+    macid = email_regex.search(email).group(1)
     # wait for email field and enter email
-    WebDriverWait(browser, 60).until(EC.element_to_be_clickable(EMAILFIELD)).send_keys("lunawadm")
+    WebDriverWait(browser, 60).until(EC.element_to_be_clickable(EMAILFIELD)).send_keys(macid)
 
     # wait for password field and enter password
-    WebDriverWait(browser, 60).until(EC.element_to_be_clickable(PASSWORDFIELD)).send_keys("Talabat4651")
+    WebDriverWait(browser, 60).until(EC.element_to_be_clickable(PASSWORDFIELD)).send_keys(password)
 
     # Login
     WebDriverWait(browser, 60).until(EC.element_to_be_clickable(LOGIN)).click()
@@ -82,13 +84,13 @@ def main(browser):
 
     # if new jobs have been found, send message and update text file
     if message != '':
-        ezgmail.send('mansoorlunawadi@yahoo.ca', 'New TA Jobs', message)
+        ezgmail.send(recipient, 'New TA Jobs', message)
         print(f"MOSAIC TA Email sent with message\n\n{message}\n\n")
         with open("mosaic_ta.txt", "w") as f:
             for job in new_ta_jobs:
                 f.write(job + '\n')
     else:
-        ezgmail.send('mansoorlunawadi@yahoo.ca', 'No New TA Jobs', 'Hopefully soon :)')
+        ezgmail.send(recipient, 'No New TA Jobs', 'Hopefully soon :)')
         print("MOSAIC TA Email sent (no new jobs)\n")
 
     print("Done.\n")

@@ -23,7 +23,7 @@ TEST2 = (By.CSS_SELECTOR, "option[value = '884']")
 BOX = (By.CSS_SELECTOR, "input[type = 'checkbox']")
 SEARCH = (By.CSS_SELECTOR, "button[type = 'submit']")
 
-def main(browser):
+def main(browser, recipient):
     print(f"\nRunning ssc.py on {curr}...\n")
     # already signed in -- from oscarplus.main
     # Redirect to SSC jobs URL
@@ -91,14 +91,14 @@ def main(browser):
 
     # send email if new jobs
     if message != '':
-        ezgmail.send('sscjobs@googlegroups.com', 'New Summer 2024 SSC Jobs', message)
+        ezgmail.send(recipient, 'New Summer 2024 SSC Jobs', message)
         print(f"SSC Email sent with message\n\n{message}\n\n")
         # set last seen to new IF message is non-empty else keep as is
         with open("ssc.txt", "w") as f:
             for job in updated_last_jobs:
                 f.write(job + '\n')    
     else:
-        ezgmail.send('sscjobs@googlegroups.com', 'No New Summer 2024 SSC Jobs', 'Hopefully soon :)')
+        ezgmail.send(recipient, 'No New Summer 2024 SSC Jobs', 'Hopefully soon :)')
         print("SSC Email sent (no new jobs)\n")
 
     print("Done.\n")

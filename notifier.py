@@ -4,6 +4,7 @@ import ssc
 import mosaic_ta
 import mosaic_swp
 from selenium import webdriver
+import pyinputplus as pyp
 
 curr = datetime.now()
 print(f"\nRunning notifier.py on {curr}...\n")
@@ -20,11 +21,11 @@ options.add_argument("high-dpi-support=0.75")
 # for pi: /usr/lib/chromium-browser/chromedriver
 # for Windows: C:\Windows\System32\chromedriver.exe
 
-path = input("Please enter the full path to chromedriver:\n")
+path = pyp.inputFilepath("Please enter the full path to chromedriver:\n")
 path.encode('unicode_escape')
-email = input("Please enter your McMaster email address:\n")
-password = input("Please enter your McMaster password:\n")
-recipient = input("Please enter the email address you want to send the jobs to:\n")
+email = pyp.inputEmail("Please enter your McMaster email address:\n")
+password = pyp.inputPassword("Please enter your McMaster password:\n")
+recipient = pyp.inputEmail("Please enter the email address you want to send the jobs to:\n")
 
 browser = webdriver.Chrome(path, chrome_options = options)
 

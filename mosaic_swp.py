@@ -23,7 +23,7 @@ ENTER = (By.CSS_SELECTOR, "input[name = 'SEARCHACTIONS#SEARCH']")
 
 
 ##### CHANGE THIS IN RASB PI #####
-def main(browser):
+def main(browser, recipient):
     print(f"\nRunning mosaic_swp.py on {curr}...\n")
     # go to SWP -- already signed in from mosaic_ta
 
@@ -64,13 +64,13 @@ def main(browser):
 
     # if new jobs have been found, send message and update text file
     if message != '':
-        ezgmail.send('swpjobs@googlegroups.com', 'New Summer 2024 SWP Jobs', message)
+        ezgmail.send(recipient, 'New Summer 2024 SWP Jobs', message)
         print(f"MOSAIC SWP Email sent with message\n\n{message}\n\n")
         with open("mosaic_swp.txt", "w") as f:
             for job in new_swp_jobs:
                 f.write(job + '\n')
     else:
-        ezgmail.send('swpjobs@googlegroups.com', 'No New Summer 2024 SWP Jobs', 'Hopefully soon :)')
+        ezgmail.send(recipient, 'No New Summer 2024 SWP Jobs', 'Hopefully soon :)')
         print("MOSAIC SWP Email sent (no new jobs)\n")
 
     print("Done.\n")
