@@ -19,14 +19,20 @@ options.add_argument("force-device-scale-factor=0.75")
 options.add_argument("high-dpi-support=0.75")
 # for pi: /usr/lib/chromium-browser/chromedriver
 # for Windows: C:\Windows\System32\chromedriver.exe
-browser = webdriver.Chrome(r"/usr/lib/chromium-browser/chromedriver", chrome_options = options)
+
+path = input("Please enter the full path to chromedriver:\n")
+path.encode('unicode_escape')
+email = input("Please enter your McMaster email address:\n")
+password = input("Please enter your McMaster password:\n")
+recipient = input("Please enter the email address you want to send the jobs to:\n")
+
+browser = webdriver.Chrome(path, chrome_options = options)
 
 def main():
-    # once we sign in in oscarplus main, the program should not need to call again (for ssc)
-    oscarplus.main(browser)
-    ssc.main(browser)
-    mosaic_ta.main(browser)
-    # mosaic_swp.main(browser)
+    oscarplus.main(browser, email, password, recipient)
+    ssc.main(browser, recipient)
+    mosaic_ta.main(browser, email, password, recipient)
+    # mosaic_swp.main(browser, recipient)
 
 main()
 browser.quit()
